@@ -63,3 +63,4 @@ derby.log
 
 # - metadata
 .DS_Store
+/.metadata/

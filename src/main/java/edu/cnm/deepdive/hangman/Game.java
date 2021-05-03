@@ -1,17 +1,15 @@
 /*
- *  Copyright 2021 CNM Ingenuity, Inc.
+ * Copyright 2021 CNM Ingenuity, Inc.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package edu.cnm.deepdive.hangman;
 
@@ -34,6 +32,10 @@ import java.util.stream.Stream;
  * {@link #newWord()} method not only selects a word, but initializes/resets the state of the game.
  */
 public class Game {
+
+  List<String> getWordList() {
+    return wordList;
+  }
 
   private static final int TOTAL_GUESSES = 10;
   private static final String WORD_FILE = "words.txt";
@@ -62,16 +64,12 @@ public class Game {
   }
 
   private void loadWords() {
-    //noinspection ConstantConditions
-    try (
-        InputStream input = getClass().getClassLoader().getResourceAsStream(WORD_FILE);
+    // noinspection ConstantConditions
+    try (InputStream input = getClass().getClassLoader().getResourceAsStream(WORD_FILE);
         InputStreamReader reader = new InputStreamReader(input);
         BufferedReader buffer = new BufferedReader(reader);
-        Stream<String> stream = buffer.lines();
-    ) {
-      wordList = stream
-          .map(String::trim)
-          .filter(Predicate.not(String::isEmpty))
+        Stream<String> stream = buffer.lines();) {
+      wordList = stream.map(String::trim).filter(Predicate.not(String::isEmpty))
           .collect(Collectors.toList());
     } catch (IOException e) {
       throw new RuntimeException(WORD_LIST_READ_ERROR, e);
@@ -106,9 +104,8 @@ public class Game {
     } else if (displayBuilder.indexOf(HIDDEN_LETTER) == -1) {
       return String.format(WIN_RESULT_PATTERN, currentWord);
     }
-    StringBuilder guessesStatus = new StringBuilder()
-        .append(STATUS_SEPARATOR_CHAR)
-        .append(STATUS_BRACKET_CHAR);
+    StringBuilder guessesStatus =
+        new StringBuilder().append(STATUS_SEPARATOR_CHAR).append(STATUS_BRACKET_CHAR);
     for (int i = 0; i < TOTAL_GUESSES; i++) {
       if (i < guessesLeft) {
         guessesStatus.append(REMAINING_GUESS_CHAR);
@@ -149,6 +146,22 @@ public class Game {
    */
   public boolean isOver() {
     return guessesLeft <= 0 || displayBuilder.indexOf(HIDDEN_LETTER) == -1;
+  }
+
+  String getCurrentWord() {
+    return currentWord;
+  }
+
+  StringBuilder getDisplayBuilder() {
+    return displayBuilder;
+  }
+
+  Set<Character> getGuessedLetters() {
+    return guessedLetters;
+  }
+
+  int getGuessesLeft() {
+    return guessesLeft;
   }
 
 }
